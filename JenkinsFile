@@ -5,6 +5,13 @@ pipeline{
             args '-u root'    // Use the root user to avoid permission issues
         }
     }
+    stages {
+        stage('Test Docker') {
+            steps {
+                sh 'docker --version'  // Verifies if Docker is accessible from Jenkins
+            }
+        }
+    }
     stages{
         stage('Checkout'){
             steps{
