@@ -1,0 +1,8 @@
+node-app-manifest
+.git
+*.md
+*.gitignore
+*.kube
+*.yaml
+*.yml
+JenkinsFile
