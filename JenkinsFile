@@ -1,5 +1,10 @@
 pipeline{
-    agent any
+    agent{
+        docker {
+            image 'node:18'   // Use the official Node.js 18 Docker image
+            args '-u root'    // Use the root user to avoid permission issues
+        }
+    }
     stages{
         stage('Checkout'){
             steps{
