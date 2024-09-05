@@ -9,10 +9,10 @@ pipeline{
         }
         stage('Build And Test'){
             steps{
-                sh 'Installing Packages'
+                sh 'echo Installing Packages'
                 sh 'ls -ltr'
                 sh 'npm install'
-                sh 'Package Installation Done'
+                sh 'echo Package Installation Done'
             }
         }
     }
