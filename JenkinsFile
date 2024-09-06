@@ -18,19 +18,27 @@ pipeline {
     }
     
     stage('Test') {
-      steps {
-        docker.image("${env.DOCKER_IMAGE}").inside {
-          sh 'node --version'
+      agent {
+        docker {
+          image "${env.DOCKER_IMAGE}"
+          args '-v /usr/src/app/node_modules'
         }
+      }
+      steps {
+        sh 'node --version'
       }
     }
 
     stage('Build And Test') {
-      steps {
-        docker.image("${env.DOCKER_IMAGE}").inside {
-          sh 'ls -ltr'
-          sh 'npm install --cache .npm'
+      agent {
+        docker {
+          image "${env.DOCKER_IMAGE}"
+          args '-v /usr/src/app/node_modules'
         }
+      }
+      steps {
+        sh 'ls -ltr'
+        sh 'npm install --cache .npm'
       }
     }
 
