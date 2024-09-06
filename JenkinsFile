@@ -8,7 +8,6 @@ pipeline{
     stages{
         stage('Test Docker') {
             steps {
-                sh 'which docker'
                 sh 'docker --version'  // Verifies if Docker is accessible from Jenkins
             }
         }
