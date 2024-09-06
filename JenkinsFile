@@ -1,55 +1,12 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18'   // Use the official Node.js 18 Docker image
-            args '-u root'    // Use the root user to avoid permission issues
-        }
+  agent {
+    docker { image 'node:16-alpine' }
+  }
+  stages {
+    stage('Test') {
+      steps {
+        sh 'node --version'
+      }
     }
-    stages {
-        stage('Initialize') {
-            steps {
-                script {
-                    def dockerHome = tool 'Docker'  // Define the Docker tool
-                    env.PATH = "${dockerHome}/bin:${env.PATH}"  // Modify the PATH environment
-                }
-            }
-        }
-        stage('Test Docker') {
-            steps {
-                sh 'docker --version'  // Verifies if Docker is accessible from Jenkins
-            }
-        }
-        stage('Checkout') {
-            steps {
-                sh 'echo passed'
-                // git branch: 'main', url: 'https://github.com/Pankajs53/Nodejs-CI-CD.git'
-            }
-        }
-        stage('Build And Test') {
-            steps {
-                sh 'echo Installing Packages'
-                sh 'ls -ltr'
-                sh 'npm install'
-                sh 'echo Package Installation Done'
-            }
-        }
-        stage('Build And Push Docker Image') {
-            environment {
-                DOCKER_IMAGE = "pankajs53/nodejs-ci-cd:${BUILD_NUMBER}"
-                REGISTRY_CREDENTIALS = credentials('dockerhub')
-            }
-            steps {
-                script {
-                    sh 'echo starting docker build and push'
-                    sh 'docker build -t ${DOCKER_IMAGE} .'
-                    sh 'echo docker image built'
-                    def dockerImage = docker.image("${DOCKER_IMAGE}")
-                    docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
-                        dockerImage.push()
-                    }
-                    sh 'echo build and push done'
-                }
-            }
-        }
-    }
+  }
 }
