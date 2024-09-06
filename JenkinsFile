@@ -1,31 +1,47 @@
 pipeline {
-  agent {
-    docker { 
-      image 'node:16-alpine' 
-    }
+  agent any // Use any available agent to run the pipeline
+
+  environment {
+    DOCKER_IMAGE = 'node:16-alpine'
   }
+
   stages {
+    stage('Initialize') {
+      steps {
+        script {
+          // Example: Print Docker path to verify
+          def dockerPath = sh(script: 'which docker', returnStdout: true).trim()
+          echo "Docker path: ${dockerPath}"
+          // Optionally, you can set up environment variables or perform other initializations here
+        }
+      }
+    }
+    
     stage('Test') {
       steps {
-        sh 'node --version'
+        docker.image("${env.DOCKER_IMAGE}").inside {
+          sh 'node --version'
+        }
       }
     }
+
     stage('Build And Test') {
       steps {
-        sh 'ls -ltr'
-        sh 'npm install --cache .npm'
+        docker.image("${env.DOCKER_IMAGE}").inside {
+          sh 'ls -ltr'
+          sh 'npm install --cache .npm'
+        }
       }
     }
-    stage('Initialize'){
-        def dockerHome = tool 'myDocker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
+
     stage('Build And Push Docker Image') {
       steps {
         script {
+          // Run Docker build command directly on the Jenkins agent where Docker is installed
           sh 'echo Building Image'
           sh 'docker build -t pankajs53/nodejs-ci-cd:${BUILD_NUMBER} .'
-          
+          // Optionally push the image if needed
+          // sh 'docker push pankajs53/nodejs-ci-cd:${BUILD_NUMBER}'
         }
       }
     }
