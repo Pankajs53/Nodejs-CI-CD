@@ -11,7 +11,7 @@ pipeline {
     stage('Build And Test') {
       steps {
         sh 'ls -ltr'
-        sh 'npm install'
+        sh 'npm install --cache .npm'
       }
     }
   }
