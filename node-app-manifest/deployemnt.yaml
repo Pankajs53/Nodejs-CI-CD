@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: node-app
-        image: pankajs53/nodejs-ci-cd:replaceImageTag
+        image: pankajs53/nodejs-ci-cd:5
         ports:
         - containerPort: 4000
