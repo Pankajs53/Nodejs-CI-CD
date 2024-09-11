@@ -2,7 +2,7 @@ pipeline {
   agent any // Use any available agent to run the pipeline
 
   environment {
-    DOCKER_IMAGE = 'node:16-alpine'
+    DOCKER_IMAGE = 'node:alpine'
   }
 
   stages {
